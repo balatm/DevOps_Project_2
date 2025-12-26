@@ -13,14 +13,22 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh "${mavenHome}/bin/mvn clean package -DskipTests"
+                    if (isUnix()) {
+                        sh "${mavenHome}/bin/mvn clean package -DskipTests"
+                    } else {
+                        bat "\"${mavenHome}\\bin\\mvn.cmd\" clean package -DskipTests"
+                    }
                 }
             }
         }
         stage('Test') {
             steps {
                 script {
-                    sh "${mavenHome}/bin/mvn test"
+                    if (isUnix()) {
+                        sh "${mavenHome}/bin/mvn test"
+                    } else {
+                        bat "\"${mavenHome}\\bin\\mvn.cmd\" test"
+                    }
                 }
             }
         }
