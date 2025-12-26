@@ -42,7 +42,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'balatm_docker') {
                         docker.image("balatm/springboot-app:${env.BUILD_NUMBER}").push()
                     }
                 }
