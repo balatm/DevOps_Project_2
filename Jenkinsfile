@@ -51,7 +51,14 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    kubernetesDeploy(configs: 'kubernetes/deployment.yaml', kubeconfigId: 'kubeconfig')
+                    // Use the kubeconfig stored as a file credential with id 'kubeconfig'
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        if (isUnix()) {
+                            sh 'kubectl apply -f kubernetes/deployment.yaml --record'
+                        } else {
+                            bat 'kubectl apply -f kubernetes\\deployment.yaml --record'
+                        }
+                    }
                 }
             }
         }
